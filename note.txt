@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+check maTK từ SN sang GV và ngược lại
+bắt login nhập như niên khóa, unique tên lớp, 
+sô ddienj thoại gv,hs
+=======
+- check maTK từ SN sang GV và ngược lại
+- maLop, maTK trong sinh vien khi thoa tác
+>>>>>>> 8ca404ed3377c989f8dd8cb30e836b7cbc9918cd
