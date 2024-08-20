@@ -1,6 +1,8 @@
 package application;
 
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 import DAO.TaiKhoanDAO;
 import model.GiaoVien;
 import model.SinhVien;
@@ -19,8 +21,8 @@ import java.awt.Color;
 public class DangNhap extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private JTextField txtDangNhap;
-    private JTextField txtMatKhau;
+    public static JTextField txtDangNhap;
+    public static JPasswordField txtMatKhau;
     public static SinhVien sinhVien = new SinhVien();
     public static GiaoVien giaoVien = new GiaoVien();
 
@@ -62,7 +64,7 @@ public class DangNhap extends JPanel {
         lblNewLabel_1_1.setBounds(466, 449, 183, 30);
         add(lblNewLabel_1_1);
 
-        txtMatKhau = new JTextField();
+        txtMatKhau = new JPasswordField();
         txtMatKhau.setFont(new Font("Tahoma", Font.PLAIN, 20));
         txtMatKhau.setBounds(692, 449, 300, 30);
         add(txtMatKhau);
@@ -70,19 +72,37 @@ public class DangNhap extends JPanel {
         JButton btnDangNhap = new JButton("Đăng nhập");
         btnDangNhap.setBackground(new Color(192, 192, 192));
         btnDangNhap.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        btnDangNhap.setBounds(469, 528, 150, 40);
+        btnDangNhap.setBounds(622, 530, 150, 40);
         btnDangNhap.addActionListener(e -> {
             try {
-                if (TaiKhoanDAO.checkLogin(txtDangNhap.getText(), txtMatKhau.getText())) {
+            	String matKhau = new String(txtMatKhau.getPassword());
+                if (TaiKhoanDAO.checkLogin(txtDangNhap.getText(), matKhau)) {
                     if (TaiKhoanDAO.getVaiTroByMaTK(txtDangNhap.getText()).equals("Sinh viên")) {
                         sinhVien = TaiKhoanDAO.getSinhVienByMaTK(txtDangNhap.getText());
+                        Home.btnCauhoi.setEnabled(false);
+                        Home.btnDiem.setEnabled(false);
+                        Home.btnLop.setEnabled(false);
+                        Home.btnMon.setEnabled(false);
+                        Home.btnSinhvien.setEnabled(false);
+                        Home.btnThi.setEnabled(true);
+                        Home.btnDiem1.setEnabled(true);
                     } else if (TaiKhoanDAO.getVaiTroByMaTK(txtDangNhap.getText()).equals("Giáo viên")) {
                         giaoVien = TaiKhoanDAO.getGiaoVienByMaTK(txtDangNhap.getText());
+                        Home.btnCauhoi.setEnabled(true);
+                        Home.btnDiem.setEnabled(true);
+                        Home.btnLop.setEnabled(true);
+                        Home.btnMon.setEnabled(true);
+                        Home.btnSinhvien.setEnabled(true);
+                        Home.btnThi.setEnabled(false);
+                        Home.btnDiem1.setEnabled(false);
                     }
-                    System.out.println(sinhVien.getMaTK());
                     JOptionPane.showMessageDialog(DangNhap.this, "Đăng nhập thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 }
+                else {
+                	JOptionPane.showMessageDialog(this, "Tài khoản và mật khẩu không đúng, vui lòng nhập lại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
             } catch (Exception e1) {
+            	
                 e1.printStackTrace();
             }
         });

@@ -121,7 +121,7 @@ public class DanhSachLop extends JPanel {
 		toolBar.add(btnReload);
 		
 		model = new DefaultTableModel(
-			new Object[] {"STT", "Mã lớp", "Tên lớp", "Niên khóa", "Xem DSSV"
+			new Object[] {"STT", "Mã lớp", "Tên lớp", "Niên khóa"
 			},0
 		);
 		dsLop = new JTable(model);
@@ -180,16 +180,15 @@ public class DanhSachLop extends JPanel {
 
 		        try {
 		        	LopDAO dao = new LopDAO();
-		        	
-		        	if (dao.checkExist(maLop)) {
-		                JOptionPane.showMessageDialog(null, "Mã lớp đã tồn tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		                return;
-		            }
 		            Lop lop = new Lop(maLop, tenLop, nienKhoa);
 		            	            
 		            boolean success;
 		            if (selectedIndex == -1) {
 				    	performSaveState();
+				    	if (dao.checkExist(maLop)) {
+			                JOptionPane.showMessageDialog(null, "Mã lớp đã tồn tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			                return;
+			            }
 		                // Thêm 
 		                success = dao.addLop(lop);
 		                if (success) {

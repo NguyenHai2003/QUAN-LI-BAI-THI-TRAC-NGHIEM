@@ -44,7 +44,7 @@ public class SinhVienDAO {
 	}
 
     public boolean insertSinhVien(SinhVien sv) throws Exception {
-        String sql = "INSERT INTO SinhVien (maSV, ho, ten, CMND, gioiTinh, queQuan, ngaySinh, maLop, SDT, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO SinhVien (maSV, ho, ten, CMND, ngaySinh, gioiTinh, queQuan ,SDT, email,maLop, maTK) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (
             Connection con = DatabaseHelper.openConnection();
@@ -54,14 +54,13 @@ public class SinhVienDAO {
         	pstmt.setString(2, sv.getHo());
         	pstmt.setString(3, sv.getTen());
         	pstmt.setString(4, sv.getCMND());
-        	pstmt.setString(5, sv.getGioiTinh());
-        	pstmt.setString(6, sv.getQueQuan());
-        	pstmt.setDate(7, sv.getNgaySinh());
-        	pstmt.setString(8, sv.getMaLop());
-        	pstmt.setString(9, sv.getSDT());
-        	pstmt.setString(10, sv.getEmail());
-
-            
+        	pstmt.setDate(5, sv.getNgaySinh());
+        	pstmt.setString(6, sv.getGioiTinh());
+        	pstmt.setString(7, sv.getQueQuan());
+        	pstmt.setString(8, sv.getSDT());
+        	pstmt.setString(9, sv.getEmail());
+        	pstmt.setString(10, sv.getMaLop());
+        	pstmt.setString(11, sv.getMaTK());
             return pstmt.executeUpdate() > 0;
         }
     }
@@ -79,24 +78,24 @@ public class SinhVienDAO {
         }
     }
 
-    public boolean updateSinhVien(SinhVien sv) throws Exception {
-        String sql = "UPDATE SinhVien SET ho = ?, ten = ?, CMND = ?, gioiTinh = ?, queQuan = ?,ngaySinh = ?, maLop = ?, SDT = ?, email = ? WHERE maSV = ?";
-        
+    public static boolean updateSinhVien(SinhVien sv) throws Exception {
+        String sql = "UPDATE SinhVien SET ho = ?, ten = ?, CMND = ?, ngaySinh = ?, gioiTinh = ?, queQuan = ?, SDT = ?, email = ?, maLop = ?, maTK = ? WHERE maSV = ?";        
         try (
             Connection con = DatabaseHelper.openConnection();
             PreparedStatement pstmt = con.prepareStatement(sql)
-        ) {       	
-        	pstmt.setString(1, sv.getHo());
-        	pstmt.setString(2, sv.getTen());
-        	pstmt.setString(3, sv.getCMND());
-        	pstmt.setString(4, sv.getGioiTinh());
-        	pstmt.setString(5, sv.getQueQuan());
-        	pstmt.setDate(6, sv.getNgaySinh());
-        	pstmt.setString(7, sv.getMaLop());
-        	pstmt.setString(8, sv.getSDT());
-        	pstmt.setString(9, sv.getEmail());
-        	pstmt.setString(10, sv.getMaSV());
-        	
+        ) {
+        	pstmt.setString(1, sv.getHo()); 
+            pstmt.setString(2, sv.getTen());
+            pstmt.setString(3, sv.getCMND());
+            pstmt.setDate(4, sv.getNgaySinh()); 
+            pstmt.setString(5, sv.getGioiTinh());
+        	pstmt.setString(6, sv.getQueQuan());
+        	pstmt.setString(7, sv.getSDT());
+        	pstmt.setString(8, sv.getEmail());
+        	pstmt.setString(9, sv.getMaLop());
+        	pstmt.setString(10, sv.getMaTK());
+        	pstmt.setString(11, sv.getMaSV());
+            
             return pstmt.executeUpdate() > 0;               
         }
     }

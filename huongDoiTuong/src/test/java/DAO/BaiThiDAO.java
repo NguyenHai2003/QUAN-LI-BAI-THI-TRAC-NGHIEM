@@ -57,6 +57,23 @@ public class BaiThiDAO {
         }
     }
 
+    public static boolean updateBaiThi(BaiThi bt) throws Exception {
+        String sql = "UPDATE BaiThi SET maSV = ?, maMH = ?, maDotThi = ?, soPhutThi = ?, diem = ? WHERE maBaiThi = ?";
+        
+        try (
+            Connection con = DatabaseHelper.openConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql)
+        ) {
+            pstmt.setString(1, bt.getMaSV());
+            pstmt.setString(2, bt.getMaMH());
+            pstmt.setString(3, bt.getMaDotThi());
+            pstmt.setInt(4, bt.getSoPhutThi());
+            pstmt.setFloat(5, bt.getDiem());
+            pstmt.setString(6, bt.getMaBaiThi());
+            return pstmt.executeUpdate() > 0;
+        }
+    }
+
 
     public List<BaiThi> searchBaiThi(String keyword) throws Exception {
         List<BaiThi> listBaiThi = new ArrayList<>();
@@ -91,27 +108,32 @@ public class BaiThiDAO {
     
     public static float tinhDiemBaiThi(String maBaiThi) throws Exception {
         float diem = 0.0f;
-        String sql = "{call dbo.sp_TinhDiemBaiThi(?, ?)}"; 
-        
+        String sql = "{call dbo.sp_TinhDiemBaiThi(?, ?)}";
+
         try (
             Connection con = DatabaseHelper.openConnection();
             CallableStatement cstmt = con.prepareCall(sql)
         ) {
-           // Đặt tham số đầu vào
-            cstmt.setString(1, maBaiThi);           
+            // Đặt tham số đầu vào
+            cstmt.setString(1, maBaiThi);
             // Đặt tham số đầu ra
-            cstmt.registerOutParameter(2, java.sql.Types.FLOAT);            
+            cstmt.registerOutParameter(2, java.sql.Types.FLOAT);
+            
             // Thực hiện stored procedure
-            cstmt.execute();          
+            cstmt.execute();
+            
             // Lấy giá trị điểm từ tham số đầu ra
             diem = cstmt.getFloat(2);
+            System.out.println("Điểm từ stored procedure: " + diem);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new Exception("Lỗi khi tính điểm bài thi.", e);
         }
-        
+
         return diem;
     }
+
+
     
     private static boolean isMaBaiThiExist(String maBaiThi) throws Exception {
         String sql = "SELECT 1 FROM BaiThi WHERE maBaiThi = ?";

@@ -33,6 +33,7 @@ public class ChonBaiThi extends JPanel {
 	public static JTextField txtLop;
 	public static JTextField txtMSSV;
 	public static JTextField txtHoTen;
+	public static String maBaiThi;
 
 	public ChonBaiThi() {
 
@@ -116,7 +117,7 @@ public class ChonBaiThi extends JPanel {
 						frame = new Thi(listCauHoi, thoiGian);
 						Thi.maMonSelected = EditHelper.timMaMonHoc((String) cbMamon.getSelectedItem(), MonHocDAO.getAllMonHoc());
 						Thi.maDotThi = kyThi + "_"+hocKy+"_"+ nam;
-						Thi.maBaiThi = BaiThiDAO.generateUniqueMaBaiThi(); 
+						maBaiThi = BaiThiDAO.generateUniqueMaBaiThi(); 
 						
 						Home.panelSV.removeAll();
 						Home.panelSV.setLayout(new BorderLayout()); 

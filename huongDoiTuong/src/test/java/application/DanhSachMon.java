@@ -110,7 +110,7 @@ public class DanhSachMon extends JPanel {
 				toolBar.add(btnReload);
 		
 		model = new DefaultTableModel(
-			new Object[] {"STT", "Mã môn học", "Tên môn học", ""
+			new Object[] {"STT", "Mã môn học", "Tên môn học"
 			},0	
 		);
 		dsMon = new JTable(model);
@@ -170,16 +170,15 @@ public class DanhSachMon extends JPanel {
 
 		        try {
 		        	MonHocDAO dao = new MonHocDAO();
-		        	
-		        	if (dao.checkExist(maMH)) {
-		                JOptionPane.showMessageDialog(null, "Mã môn học đã tồn tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		                return;
-		            }
 		            MonHoc mh = new MonHoc(maMH, tenMH);		            
 		            
 		            boolean success;
 		            if (selectedIndex == -1) {
 				    	performSaveState();
+				    	if (dao.checkExist(maMH)) {
+			                JOptionPane.showMessageDialog(null, "Mã môn học đã tồn tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			                return;
+			            }
 		                // Thêm 
 		                success = dao.insertMonHoc(mh);
 		                if (success) {

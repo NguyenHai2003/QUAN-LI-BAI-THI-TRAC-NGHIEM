@@ -36,12 +36,13 @@ public class CTBaiThi extends JPanel {
     ButtonGroup group = null;
     private Timer timer;
     private boolean check = false;
+    private JLabel lbDapAn;
     
     
     public CTBaiThi(List<CauHoiThi> ListCauHoi, int thoiGianPhut) {
     	check = false;
         this.listCauHoi = ListCauHoi;
-        this.thoiGianGoc = thoiGianPhut;
+        this.thoiGianGoc = thoiGianPhut*60;
         initialize();
         loadCauHoi(currentIndex);
     }
@@ -78,13 +79,13 @@ public class CTBaiThi extends JPanel {
             }
         });
         panel.add(btnThoat);
-        
-        JLabel lbCountdown_1 = new JLabel("Đáp án: "+listCauHoi.get(currentIndex).getDapAn());
-        lbCountdown_1.setBackground(Color.WHITE);
-        lbCountdown_1.setForeground(Color.BLACK);
-        lbCountdown_1.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lbCountdown_1.setBounds(902, -5, 223, 58);
-        panel.add(lbCountdown_1);
+
+        lbDapAn = new JLabel("Đáp án: ");
+        lbDapAn.setBackground(Color.WHITE);
+        lbDapAn.setForeground(Color.BLACK);
+        lbDapAn.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbDapAn.setBounds(623, 0, 223, 58);
+        panel.add(lbDapAn);
 
         JPanel panel_1 = new JPanel();
         panel_1.setBounds(10, 59, 1500, 512);
@@ -173,7 +174,7 @@ public class CTBaiThi extends JPanel {
             lbIndex.setText((index + 1) + " / " + listCauHoi.size());
             
             CauDaChon selectedAnswer = Thi.answers.get(index);
-            if (selectedAnswer != null) {
+            if (selectedAnswer != null && selectedAnswer.getCauDaChon() != null) {
                 switch (selectedAnswer.getCauDaChon()) {
                     case "A":
                         rdbA.setSelected(true);
@@ -191,6 +192,7 @@ public class CTBaiThi extends JPanel {
             } else {
                 group.clearSelection(); 
             }
+            lbDapAn.setText("Đáp án: "+listCauHoi.get(currentIndex).getDapAn());
         }
     }
     

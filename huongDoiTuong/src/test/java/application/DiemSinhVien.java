@@ -21,6 +21,10 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import DAO.DSDiemDAO;
+import DAO.LopDAO;
+import DAO.MonHocDAO;
+import model.Lop;
+import model.MonHoc;
 import model.SinhVien;
 import java.awt.Color;
 
@@ -85,6 +89,7 @@ public class DiemSinhVien extends JPanel {
 		btnTim.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	model.setRowCount(0);
                 initTable();
             }
         });
@@ -93,19 +98,20 @@ public class DiemSinhVien extends JPanel {
 	}
 	
 	private void initcbMalop() {
-		DSDiemDAO stfDAO = new DSDiemDAO();
+		LopDAO  stfDAO = new LopDAO();
+		MonHocDAO  stfDAOMH = new MonHocDAO();
         try {
-        	List<String> maLopList = stfDAO.getAllMaLop();
+        	List<Lop> maLopList = stfDAO.getAll();
             cbModellop.removeAllElements();
-            for (String maLop : maLopList) {
-                cbModellop.addElement(maLop);
+            for (Lop l : maLopList) {
+                cbModellop.addElement(l.getMaLop());
             }
             
 
-            List<String> maMonList = stfDAO.getAllMaMon();
+            List<MonHoc> maMonList = stfDAOMH.getAllMonHoc();
             cbModelmon.removeAllElements();
-            for (String maMon : maMonList) {
-                cbModelmon.addElement(maMon);
+            for (MonHoc mh : maMonList) {
+                cbModelmon.addElement(mh.getMaMH());
             }
             
         } catch (Exception e) {

@@ -39,7 +39,7 @@ public class Thi extends JPanel {
     private JLabel lbIndex, lbCountdown;
     public static String maDotThi;
     public static String maMonSelected;
-    public static String maBaiThi;
+    
     static Map<Integer, CauDaChon> answers= new HashMap<>(); 
     ButtonGroup group = null;
     private Timer timer;
@@ -51,12 +51,14 @@ public class Thi extends JPanel {
         this.listCauHoi = ListCauHoi;
         this.thoiGianGoc = thoiGianPhut;
         this.thoiGian = thoiGianPhut * 60;
+        answers= new HashMap<>();
         initialize();
-        startCountdown();
+        startCountdown();      
         loadCauHoi(currentIndex);
     }
 
     private void initialize() {
+    	currentIndex = 0;
         setLayout(null);
 
         JPanel panel = new JPanel();
@@ -212,6 +214,20 @@ public class Thi extends JPanel {
             }
         }
     }
+     
+    private void importCauHoiVaoList() {
+    	for (int i =0; i < (listCauHoi.size()); i++) {
+    		CauHoiThi currentCauHoi = listCauHoi.get(i);
+            String id = currentCauHoi.getId();
+            CauDaChon existingAnswer = answers.get(i);
+
+            if (existingAnswer != null) {
+                existingAnswer.setCauDaChon(null);
+            } else {
+                answers.put(currentIndex, new CauDaChon(ChonBaiThi.maBaiThi, id, null));
+            }
+        }
+    }
     
     private void saveAnswer(String answer) {
         CauHoiThi currentCauHoi = listCauHoi.get(currentIndex);
@@ -221,7 +237,7 @@ public class Thi extends JPanel {
         if (existingAnswer != null) {
             existingAnswer.setCauDaChon(answer);
         } else {
-            answers.put(currentIndex, new CauDaChon(maBaiThi, id, answer));
+            answers.put(currentIndex, new CauDaChon(ChonBaiThi.maBaiThi, id, answer));
         }
     }
 
@@ -245,26 +261,32 @@ public class Thi extends JPanel {
     	float diem = -999;
     	check = true;
 		try {
-			diem = BaiThiDAO.tinhDiemBaiThi(maBaiThi);
-			bt = new BaiThi(maBaiThi,DangNhap.sinhVien.getMaSV(), maMonSelected, maDotThi, thoiGianGoc, diem);
+			bt = new BaiThi(ChonBaiThi.maBaiThi,DangNhap.sinhVien.getMaSV(), maMonSelected, maDotThi, thoiGianGoc, diem);
 			BaiThiDAO.insertBaiThi(bt);	
+			++currentIndex;
+			while(currentIndex < listCauHoi.size()) {
+				saveAnswer(null);
+				++currentIndex;
+			}
 			for (Map.Entry<Integer, CauDaChon> entry : answers.entrySet()) {
 	            CauDaChon answer = entry.getValue();
 	            CauDaChonDAO.insertCauDaChon(answer);
 	        }
-			
-			
+			diem = BaiThiDAO.tinhDiemBaiThi(ChonBaiThi.maBaiThi);			
+			bt = new BaiThi(ChonBaiThi.maBaiThi,DangNhap.sinhVien.getMaSV(), maMonSelected, maDotThi, thoiGianGoc, diem);
+			BaiThiDAO.updateBaiThi(bt);	
+			JOptionPane.showMessageDialog(this, "Bạn đạt dược " + diem +" điểm");
+	        
+	        CTBaiThi ctbt = new CTBaiThi(listCauHoi,thoiGianGoc);
+	        Home.panelSV.removeAll();
+	        Home.panelSV.setLayout(new BorderLayout()); 
+	        Home.panelSV.add(ctbt, BorderLayout.CENTER);
+	        Home.panelSV.revalidate();
+	        Home.panelSV.repaint();			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        JOptionPane.showMessageDialog(this, "Bạn đạt dược " + diem +" điểm");
         
-        CTBaiThi ctbt = new CTBaiThi(listCauHoi,thoiGianGoc);
-        Home.panelSV.removeAll();
-        Home.panelSV.setLayout(new BorderLayout()); 
-        Home.panelSV.add(ctbt, BorderLayout.CENTER);
-        Home.panelSV.revalidate();
-        Home.panelSV.repaint();
     }
     
     private void startCountdown() {

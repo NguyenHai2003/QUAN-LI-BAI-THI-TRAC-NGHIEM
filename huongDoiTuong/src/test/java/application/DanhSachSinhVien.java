@@ -209,7 +209,7 @@ public class DanhSachSinhVien extends JPanel {
 		toolBar.add(btnReload);
 				
 		model = new DefaultTableModel(
-			new Object[] {"STT", "MSSV", "Họ", "Tên", "CMND", "Giới tính", "Quê quán", "Ngày Sinh", "SĐT", "Email", "Xem điểm"
+			new Object[] {"STT", "MSSV", "Họ", "Tên", "CMND", "Giới tính", "Quê quán", "Ngày Sinh", "SĐT", "Email"
 			}, 0
 		);
 		tblSV = new JTable(model);
@@ -278,16 +278,17 @@ public class DanhSachSinhVien extends JPanel {
 		        try {
 		        	SinhVienDAO dao = new SinhVienDAO();
 		        	
-		        	if (dao.checkExist(maSV)) {
-		                JOptionPane.showMessageDialog(null, "Mã sinh viên đã tồn tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		                return;
-		            }
+		        	
 		        	
 		        	SinhVien sv = new SinhVien(ho, ten, CMND, ngaySinh, gioiTinh, queQuan, maSV, maLop, null, soDT, email);
 		        	
 		            boolean success;
 		            if (selectedIndex == -1) {
 		            	performSaveState();
+		            	if (dao.checkExist(maSV)) {
+			                JOptionPane.showMessageDialog(null, "Mã sinh viên đã tồn tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			                return;
+			            }
 		                // Thêm mới SinhVien
 		                success = dao.insertSinhVien(sv);
 		                if (success) {

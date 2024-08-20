@@ -5,8 +5,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import DAO.TaiKhoanDAO;
+import model.GiaoVien;
+import model.SinhVien;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
@@ -28,8 +34,9 @@ public class Home extends JFrame {
     private JPanel contentPane;
     private static JPanel panel;
     public static JPanel panelSV;
-    private JTabbedPane tabbedPane;
-
+    public static JTabbedPane tabbedPane;
+    public static JButton btnCauhoi,btnDiem, btnMon, btnLop, btnSinhvien, btnThi, btnDiem1;
+    
     /**
      * Launch the application.
      */
@@ -70,20 +77,32 @@ public class Home extends JFrame {
         mnDangxuat.setFont(new Font("Tahoma", Font.PLAIN, 14));
         mnDangxuat.setIcon(new ImageIcon(Home.class.getResource("/images/logout.png")));
         mnNewMenu.add(mnDangxuat);
-    
         mnDangxuat.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-
-        	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn đăng xuất?", "Xác nhận đăng xuất", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                	DangNhap.sinhVien = new SinhVien();
+                    DangNhap.giaoVien = new GiaoVien();
+                    Home.btnCauhoi.setEnabled(false);
+                    Home.btnDiem.setEnabled(false);
+                    Home.btnLop.setEnabled(false);
+                    Home.btnMon.setEnabled(false);
+                    Home.btnSinhvien.setEnabled(false);
+                    Home.btnThi.setEnabled(false);
+                    Home.btnDiem1.setEnabled(false);
+                    DangNhap.txtDangNhap.setText("");
+                    DangNhap.txtMatKhau.setText("");
+                    panel.removeAll();
+                    panelSV.removeAll();
+                    JOptionPane.showMessageDialog(null, "Đã đăng xuất thành công!");
+                    
+                }
+            }
         });
-        
+
         JSeparator separator = new JSeparator();
         mnNewMenu.add(separator);
-
-        JMenuItem mnTaoTK = new JMenuItem("Tạo tài khoản");
-        mnTaoTK.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        mnTaoTK.setIcon(new ImageIcon(Home.class.getResource("/images/taikhoan.png")));
-        mnNewMenu.add(mnTaoTK);
 
         JSeparator separator_1 = new JSeparator();
         mnNewMenu.add(separator_1);
@@ -93,12 +112,6 @@ public class Home extends JFrame {
         mnExit.setFont(new Font("Tahoma", Font.PLAIN, 14));
         mnNewMenu.add(mnExit);
 
-        mnExit.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	dispose();
-		    }
-		});
-        
         JMenu mnNewMenu_1 = new JMenu("Help");
         mnNewMenu_1.setFont(new Font("Tahoma", Font.BOLD, 14));
         menuBar.add(mnNewMenu_1);
@@ -108,26 +121,19 @@ public class Home extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
 
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        contentPane.add(tabbedPane, BorderLayout.NORTH);
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        contentPane.add(tabbedPane, BorderLayout.CENTER);
 
         JPanel Quanli = new JPanel();
-        
         ImageIcon iconQL = new ImageIcon(Home.class.getResource("/images/quanli.png"));
         ImageIcon iconLG = new ImageIcon(Home.class.getResource("/images/login.png"));
+        ImageIcon iconSU = new ImageIcon(Home.class.getResource("/images/signup.png"));
         
         JPanel DangNhap = new DangNhap();
         tabbedPane.addTab("ĐĂNG NHẬP", iconLG, DangNhap, null);
-        GroupLayout gl_DangNhap = new GroupLayout(DangNhap);
-        gl_DangNhap.setHorizontalGroup(
-        	gl_DangNhap.createParallelGroup(Alignment.LEADING)
-        		.addGap(0, 1525, Short.MAX_VALUE)
-        );
-        gl_DangNhap.setVerticalGroup(
-        	gl_DangNhap.createParallelGroup(Alignment.LEADING)
-        		.addGap(0, 774, Short.MAX_VALUE)
-        );
-        DangNhap.setLayout(gl_DangNhap);
+        
+        JPanel DangKi = new DangKi();
+        tabbedPane.addTab("ĐĂNG KÍ", iconSU, DangKi, null);
         tabbedPane.addTab(" QUẢN LÍ ", iconQL, Quanli, null);
 
         JToolBar toolBar = new JToolBar();
@@ -148,10 +154,65 @@ public class Home extends JFrame {
         			.addComponent(panel, GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE))
         );
 
-        JButton btnSinhvien = new JButton(" SINH VIÊN ");
+        btnSinhvien = new JButton(" SINH VIÊN ");
         btnSinhvien.setIcon(new ImageIcon(Home.class.getResource("/images/group.png")));
         toolBar.add(btnSinhvien);
+
+        btnLop = new JButton(" LỚP HỌC ");
+        btnLop.setIcon(new ImageIcon(Home.class.getResource("/images/presentation.png")));
+        toolBar.add(btnLop);
+
+        btnMon = new JButton(" MÔN HỌC ");
+        btnMon.setIcon(new ImageIcon(Home.class.getResource("/images/books.png")));
+        toolBar.add(btnMon);
+
+        btnDiem = new JButton(" ĐIỂM THI ");
+        btnDiem.setIcon(new ImageIcon(Home.class.getResource("/images/score.png")));
+        toolBar.add(btnDiem);
+
+        btnCauhoi = new JButton(" CÂU HỎI ");
+        btnCauhoi.setIcon(new ImageIcon(Home.class.getResource("/images/question.png")));
+        toolBar.add(btnCauhoi);
+        Quanli.setLayout(gl_Quanli);
+
+        JPanel Sinhvien = new JPanel();
+        ImageIcon icon1 = new ImageIcon(Home.class.getResource("/images/sinhvien.png"));
+        tabbedPane.addTab(" SINH VIÊN ", icon1, Sinhvien, null);        
+        JToolBar toolBar_1 = new JToolBar();
         
+        panelSV = new JPanel();
+        GroupLayout gl_Sinhvien = new GroupLayout(Sinhvien);
+        gl_Sinhvien.setHorizontalGroup(
+        	gl_Sinhvien.createParallelGroup(Alignment.LEADING)
+        		.addComponent(toolBar_1, GroupLayout.DEFAULT_SIZE, 1525, Short.MAX_VALUE)
+        		.addGroup(gl_Sinhvien.createSequentialGroup()
+        			.addGap(10)
+        			.addComponent(panelSV, GroupLayout.PREFERRED_SIZE, 1525, GroupLayout.PREFERRED_SIZE))
+        );
+        gl_Sinhvien.setVerticalGroup(
+        	gl_Sinhvien.createParallelGroup(Alignment.LEADING)
+        		.addGroup(gl_Sinhvien.createSequentialGroup()
+        			.addComponent(toolBar_1, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(panelSV, GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE))
+        );
+
+        btnThi = new JButton(" BẮT ĐẦU THI ");
+        btnThi.setIcon(new ImageIcon(Home.class.getResource("/images/test.png")));
+        toolBar_1.add(btnThi);
+
+        btnDiem1 = new JButton(" ĐIỂM THI");      
+        btnDiem1.setIcon(new ImageIcon(Home.class.getResource("/images/score.png")));
+        toolBar_1.add(btnDiem1);
+
+        Sinhvien.setLayout(gl_Sinhvien);
+        
+        mnExit.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	dispose();
+		    }
+		});
+
         btnSinhvien.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 DanhSachSinhVien dssv = new DanhSachSinhVien();
@@ -162,11 +223,7 @@ public class Home extends JFrame {
                 panel.repaint();
             }
         });
-
-        JButton btnLop = new JButton(" LỚP HỌC ");
-        btnLop.setIcon(new ImageIcon(Home.class.getResource("/images/presentation.png")));
-        toolBar.add(btnLop);
-
+        
         btnLop.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 DanhSachLop dsl = new DanhSachLop();
@@ -177,10 +234,6 @@ public class Home extends JFrame {
                 panel.repaint();
             }
         });
-        
-        JButton btnMon = new JButton(" MÔN HỌC ");
-        btnMon.setIcon(new ImageIcon(Home.class.getResource("/images/books.png")));
-        toolBar.add(btnMon);
         
         btnMon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -193,10 +246,6 @@ public class Home extends JFrame {
             }
         });
         
-        JButton btnDiem = new JButton(" ĐIỂM THI ");
-        btnDiem.setIcon(new ImageIcon(Home.class.getResource("/images/score.png")));
-        toolBar.add(btnDiem);
-        
         btnDiem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 DanhSachDiem dsd = new DanhSachDiem();
@@ -206,13 +255,7 @@ public class Home extends JFrame {
                 panel.revalidate();
                 panel.repaint();
             }
-
-        });  
-
-        JButton btnCauhoi = new JButton(" CÂU HỎI ");
-        btnCauhoi.setIcon(new ImageIcon(Home.class.getResource("/images/question.png")));
-        toolBar.add(btnCauhoi);
-        Quanli.setLayout(gl_Quanli);
+        });   
         
         btnCauhoi.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -225,47 +268,6 @@ public class Home extends JFrame {
         	}
         });
         
-
-        JPanel Sinhvien = new JPanel();
-        ImageIcon icon1 = new ImageIcon(Home.class.getResource("/images/sinhvien.png"));
-        tabbedPane.addTab(" SINH VIÊN ", icon1, Sinhvien, null);
-
-        JToolBar toolBar_1 = new JToolBar();
-
-        GroupLayout gl_Sinhvien = new GroupLayout(Sinhvien);
-        gl_Sinhvien.setHorizontalGroup(
-            gl_Sinhvien.createParallelGroup(Alignment.LEADING)
-                .addComponent(toolBar_1, GroupLayout.DEFAULT_SIZE, 1525, Short.MAX_VALUE)
-        );
-        gl_Sinhvien.setVerticalGroup(
-            gl_Sinhvien.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_Sinhvien.createSequentialGroup()
-                    .addComponent(toolBar_1, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(718, Short.MAX_VALUE))
-        );
-
-        
-        panelSV = new JPanel();
-        GroupLayout gl_Sinhvien1 = new GroupLayout(Sinhvien);
-        gl_Sinhvien1.setHorizontalGroup(
-        	gl_Sinhvien1.createParallelGroup(Alignment.LEADING)
-        		.addComponent(toolBar_1, GroupLayout.DEFAULT_SIZE, 1525, Short.MAX_VALUE)
-        		.addGroup(gl_Sinhvien1.createSequentialGroup()
-        			.addGap(10)
-        			.addComponent(panelSV, GroupLayout.PREFERRED_SIZE, 1525, GroupLayout.PREFERRED_SIZE))
-        );
-        gl_Sinhvien1.setVerticalGroup(
-        	gl_Sinhvien1.createParallelGroup(Alignment.LEADING)
-        		.addGroup(gl_Sinhvien1.createSequentialGroup()
-        			.addComponent(toolBar_1, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-        			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(panelSV, GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE))
-        );
-
-        JButton btnThi = new JButton(" BẮT ĐẦU THI ");
-        btnThi.setIcon(new ImageIcon(Home.class.getResource("/images/test.png")));
-        toolBar_1.add(btnThi);
-
         btnThi.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		ChonBaiThi cbt = new ChonBaiThi();
@@ -277,10 +279,6 @@ public class Home extends JFrame {
         	}
         });
         
-        JButton btnDiem1 = new JButton(" ĐIỂM THI");     
-        btnDiem1.setIcon(new ImageIcon(Home.class.getResource("/images/score.png")));
-        toolBar_1.add(btnDiem1);
-        
         btnDiem1.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		DiemSinhVien dsv = new DiemSinhVien();
@@ -291,8 +289,12 @@ public class Home extends JFrame {
         		panelSV.repaint();
         	}
         });
-
-        Sinhvien.setLayout(gl_Sinhvien1);
-
+        Home.btnCauhoi.setEnabled(false);
+        Home.btnDiem.setEnabled(false);
+        Home.btnLop.setEnabled(false);
+        Home.btnMon.setEnabled(false);
+        Home.btnSinhvien.setEnabled(false);
+        Home.btnThi.setEnabled(false);
+        Home.btnDiem1.setEnabled(false);
     }
 }

@@ -81,7 +81,7 @@ public class GiaoVienDAO {
 	    }
 	}
 
-	public boolean updateGiaoVien(GiaoVien gv) throws Exception {
+	public static boolean updateGiaoVien(GiaoVien gv) throws Exception {
 	    String sql = "UPDATE GiaoVien SET hocVi = ?, maTK = ?, ho = ?, ten = ?, cMND = ?, ngaySinh = ?, gioiTinh = ?, queQuan = ? WHERE maGV = ?";
 
 	    try (

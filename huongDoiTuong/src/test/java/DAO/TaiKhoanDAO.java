@@ -37,7 +37,7 @@ public class TaiKhoanDAO {
         return listTaiKhoan;
     }
 
-    public boolean insertTaiKhoan(TaiKhoan tk) throws Exception { 
+    public static boolean insertTaiKhoan(TaiKhoan tk) throws Exception { 
         String sql = "INSERT INTO TaiKhoan (maTK, password, vaiTro) VALUES (?, ?, ?)";
         
         try (
@@ -65,7 +65,7 @@ public class TaiKhoanDAO {
         }
     }
 
-    public boolean updateTaiKhoan(TaiKhoan tk) throws Exception {
+    public static boolean updateTaiKhoan(TaiKhoan tk) throws Exception {
         String sql = "UPDATE TaiKhoan SET password = ?, vaiTro = ? WHERE maTK = ?";
         
         try (
@@ -173,6 +173,66 @@ public class TaiKhoanDAO {
     }
     public static GiaoVien getGiaoVienByMaTK(String maTK) throws Exception {
         String sql = "SELECT * FROM GiaoVien WHERE maTK = ?";
+        
+        try (
+            Connection con = DatabaseHelper.openConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql)
+        ) {
+            pstmt.setString(1, maTK);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new GiaoVien(
+                        rs.getNString("ho"),
+                        rs.getNString("ten"),
+                        rs.getString("cMND"),
+                        rs.getDate("ngaySinh"),
+                        rs.getNString("gioiTinh"),
+                        rs.getNString("queQuan"),
+                        rs.getString("maGV"),
+                        rs.getString("hocVi"),
+                        rs.getString("maTK")
+                    );
+                }
+            }
+        }
+        
+        return null; 
+    }
+    
+    public static SinhVien getSinhVienChuaDangKiByMaTK(String maTK) throws Exception {
+        String sql = "SELECT * FROM SinhVien WHERE maSV = ?";
+        
+        try (
+            Connection con = DatabaseHelper.openConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql)
+        ) {
+            pstmt.setString(1, maTK);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+
+                    return new SinhVien(
+                        rs.getNString("ho"),
+                        rs.getNString("ten"),
+                        rs.getString("cMND"),
+                        rs.getDate("ngaySinh"),
+                        rs.getNString("gioiTinh"),
+                        rs.getNString("queQuan"),
+                        rs.getString("maSV"),
+                        rs.getString("maLop"),
+                        rs.getString("maTK"),
+                        rs.getString("SDT"),
+                        rs.getString("email")
+                    );
+                }
+            }
+        }
+        
+        return null; 
+    }
+    public static GiaoVien getGiaoVienChuaDangKiByMaTK(String maTK) throws Exception {
+        String sql = "SELECT * FROM GiaoVien WHERE maGV = ?";
         
         try (
             Connection con = DatabaseHelper.openConnection();
