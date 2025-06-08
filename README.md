@@ -3,6 +3,9 @@
 
 Ứng dụng này cung cấp các chức năng để quản lý thi trắc nghiệm, bao gồm quản lý môn học, lớp học, sinh viên, điểm thi, câu hỏi thi và các chức năng liên quan đến thi trắc nghiệm. Ứng dụng được tổ chức thành nhiều phần chính, mỗi phần cung cấp các tính năng cụ thể.
 
+## Công nghệ sử dụng
+- Ngôn ngữ lập trình: Java OOP, Java Swing
+  
 ## Chức năng của Chương trình
 
 ### A. Đăng nhập
@@ -31,5 +34,3 @@
 
 3. **In Bảng điểm Thi Trắc nghiệm của một Môn học của một Lớp**
     - Nếu có sinh viên chưa thi thì ghi “Chưa thi”.
-
----
